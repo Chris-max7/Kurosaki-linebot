@@ -1,4 +1,5 @@
 from flask import Flask, request, abort
+import argparse
 
 from linebot import (
     LineBotApi, WebhookHandler
@@ -55,4 +56,12 @@ def handle_message(event):
 
 
 if __name__ == "__main__":
-    app.run()
+    arg_parser = argparse.ArgumentParser(
+        usage='Usage: python ' + __file__ + ' [--port <port>] [--help]'
+    )
+    arg_parser.add_argument('-p', '--port', type=int, default=int(os.environ.get('PORT', 8000)), help='port')
+    arg_parser.add_argument('-d', '--debug', default=False, help='debug')
+    arg_parser.add_argument('--host', default='0.0.0.0', help='host')
+    options = arg_parser.parse_args()
+
+    app.run(debug=options.debug, host=options.host, port=options.port)
